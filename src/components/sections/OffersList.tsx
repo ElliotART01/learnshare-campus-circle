@@ -75,6 +75,7 @@ export const OffersList: React.FC<OffersListProps> = ({ offers }) => {
               status={offer.status}
               type="offer"
               condition={offer.condition}
+              imageUrl={offer.imageUrl}
             />
           ))}
         </div>

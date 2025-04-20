@@ -46,6 +46,7 @@ export const RequestsList: React.FC<RequestsListProps> = ({ requests }) => {
               timestamp={request.timestamp}
               status={request.status}
               type="request"
+              imageUrl={request.imageUrl}
             />
           ))}
         </div>

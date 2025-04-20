@@ -25,7 +25,8 @@ const Index = () => {
         title: data.title,
         description: data.description,
         status: 'Open',
-        timestamp: timestamp
+        timestamp: timestamp,
+        imageUrl: data.imageUrl
       };
       
       setRequests(prevRequests => [...prevRequests, newRequest]);
@@ -39,7 +40,8 @@ const Index = () => {
         description: data.description,
         condition: data.condition,
         status: 'Available',
-        timestamp: timestamp
+        timestamp: timestamp,
+        imageUrl: data.imageUrl
       };
       
       setOffers(prevOffers => [...prevOffers, newOffer]);
