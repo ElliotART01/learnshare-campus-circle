@@ -6,16 +6,43 @@ import { ItemForm } from "@/components/forms/ItemForm";
 import { RequestsList } from "@/components/sections/RequestsList";
 import { OffersList } from "@/components/sections/OffersList";
 import { mockRequests, mockOffers } from "@/data/mockData";
+import { Request, Offer } from "@/types";
+import { v4 as uuidv4 } from 'uuid';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("browse-offers");
+  const [requests, setRequests] = useState<Request[]>(mockRequests);
+  const [offers, setOffers] = useState<Offer[]>(mockOffers);
 
-  const handleFormSubmitSuccess = () => {
-    // In a real app, we would refresh the data
-    // For now just switch to the browse tab
-    if (activeTab === "post-request") {
+  const handleFormSubmitSuccess = (data: any, type: 'request' | 'offer') => {
+    const timestamp = new Date().toISOString();
+    
+    if (type === 'request') {
+      const newRequest: Request = {
+        id: uuidv4(),
+        studentEmail: data.studentEmail,
+        studentName: data.studentName,
+        title: data.title,
+        description: data.description,
+        status: 'Open',
+        timestamp: timestamp
+      };
+      
+      setRequests(prevRequests => [...prevRequests, newRequest]);
       setActiveTab("browse-requests");
-    } else if (activeTab === "post-offer") {
+    } else if (type === 'offer') {
+      const newOffer: Offer = {
+        id: uuidv4(),
+        studentEmail: data.studentEmail,
+        studentName: data.studentName,
+        title: data.title,
+        description: data.description,
+        condition: data.condition,
+        status: 'Available',
+        timestamp: timestamp
+      };
+      
+      setOffers(prevOffers => [...prevOffers, newOffer]);
       setActiveTab("browse-offers");
     }
   };
@@ -48,22 +75,22 @@ const Index = () => {
           
           <TabsContent value="post-request" className="mt-6">
             <div className="max-w-2xl mx-auto">
-              <ItemForm type="request" onSubmitSuccess={handleFormSubmitSuccess} />
+              <ItemForm type="request" onSubmitSuccess={(data) => handleFormSubmitSuccess(data, 'request')} />
             </div>
           </TabsContent>
           
           <TabsContent value="post-offer" className="mt-6">
             <div className="max-w-2xl mx-auto">
-              <ItemForm type="offer" onSubmitSuccess={handleFormSubmitSuccess} />
+              <ItemForm type="offer" onSubmitSuccess={(data) => handleFormSubmitSuccess(data, 'offer')} />
             </div>
           </TabsContent>
           
           <TabsContent value="browse-requests" className="mt-6">
-            <RequestsList requests={mockRequests} />
+            <RequestsList requests={requests} />
           </TabsContent>
           
           <TabsContent value="browse-offers" className="mt-6">
-            <OffersList offers={mockOffers} />
+            <OffersList offers={offers} />
           </TabsContent>
         </Tabs>
       </main>

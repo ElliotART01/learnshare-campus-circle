@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -27,7 +26,7 @@ const offerSchema = requestSchema.extend({
 
 interface ItemFormProps {
   type: 'request' | 'offer';
-  onSubmitSuccess: () => void;
+  onSubmitSuccess: (data: any) => void;
 }
 
 export const ItemForm: React.FC<ItemFormProps> = ({ type, onSubmitSuccess }) => {
@@ -56,9 +55,12 @@ export const ItemForm: React.FC<ItemFormProps> = ({ type, onSubmitSuccess }) => 
         title: "Success!",
         description: `Your ${type} has been posted.`,
       });
+      
+      // Pass the form data back to the parent component
+      onSubmitSuccess(data);
+      
       form.reset();
       setIsSubmitting(false);
-      onSubmitSuccess();
     }, 1000);
   };
   
