@@ -9,6 +9,7 @@ import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { useToast } from '@/components/ui/use-toast';
+import { ImageUpload } from './ImageUpload';
 
 const requestSchema = z.object({
   title: z.string().min(3, { message: "Title must be at least 3 characters." }),
@@ -32,6 +33,7 @@ interface ItemFormProps {
 export const ItemForm: React.FC<ItemFormProps> = ({ type, onSubmitSuccess }) => {
   const { toast } = useToast();
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [imageUrl, setImageUrl] = useState<string>('');
   
   const form = useForm<any>({
     resolver: zodResolver(type === 'request' ? requestSchema : offerSchema),
@@ -50,16 +52,17 @@ export const ItemForm: React.FC<ItemFormProps> = ({ type, onSubmitSuccess }) => 
     
     // Simulate API call
     setTimeout(() => {
-      console.log('Form submitted:', data);
+      console.log('Form submitted:', { ...data, imageUrl });
       toast({
         title: "Success!",
         description: `Your ${type} has been posted.`,
       });
       
       // Pass the form data back to the parent component
-      onSubmitSuccess(data);
+      onSubmitSuccess({ ...data, imageUrl });
       
       form.reset();
+      setImageUrl('');
       setIsSubmitting(false);
     }, 1000);
   };
@@ -133,6 +136,8 @@ export const ItemForm: React.FC<ItemFormProps> = ({ type, onSubmitSuccess }) => 
                 )}
               />
             )}
+            
+            <ImageUpload onImageSelected={setImageUrl} />
             
             <div className="border-t pt-4 mt-4">
               <h3 className="text-sm font-medium mb-4">Your Contact Information</h3>

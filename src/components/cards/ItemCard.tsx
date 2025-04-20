@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { MessageCircle } from 'lucide-react';
-import { useToast } from '@/components/ui/use-toast';
+import { useToast } from '@/hooks/use-toast';
 
 interface ItemCardProps {
   id: string;
@@ -16,6 +16,9 @@ interface ItemCardProps {
   status: string;
   type: 'request' | 'offer';
   condition?: string;
+  imageUrl?: string;
+  isOwner?: boolean;
+  onStatusChange?: (newStatus: string) => void;
 }
 
 export const ItemCard: React.FC<ItemCardProps> = ({
@@ -27,7 +30,10 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   timestamp,
   status,
   type,
-  condition
+  condition,
+  imageUrl,
+  isOwner,
+  onStatusChange
 }) => {
   const { toast } = useToast();
   
@@ -43,6 +49,21 @@ export const ItemCard: React.FC<ItemCardProps> = ({
     toast({
       title: "Contact initiated",
       description: `Opening email to contact ${studentName}`,
+    });
+  };
+
+  const handleStatusToggle = () => {
+    if (!onStatusChange) return;
+    
+    const newStatus = type === 'request' 
+      ? (status === 'Open' ? 'Fulfilled' : 'Open')
+      : (status === 'Available' ? 'Claimed' : 'Available');
+    
+    onStatusChange(newStatus);
+    
+    toast({
+      title: "Status updated",
+      description: `Item marked as ${newStatus}`,
     });
   };
   
@@ -70,7 +91,17 @@ export const ItemCard: React.FC<ItemCardProps> = ({
           Posted by {studentName} on {formattedDate}
         </CardDescription>
       </CardHeader>
+      
       <CardContent className="flex-grow">
+        {imageUrl && (
+          <div className="mb-4">
+            <img 
+              src={imageUrl} 
+              alt={title}
+              className="w-full h-48 object-cover rounded-md"
+            />
+          </div>
+        )}
         <p className="text-sm text-gray-700">{description}</p>
         {condition && (
           <p className="text-sm mt-2">
@@ -78,15 +109,26 @@ export const ItemCard: React.FC<ItemCardProps> = ({
           </p>
         )}
       </CardContent>
-      <CardFooter className="pt-4 border-t">
-        <Button 
-          onClick={handleContact}
-          className="w-full" 
-          disabled={status !== 'Open' && status !== 'Available'}
-        >
-          <MessageCircle className="w-4 h-4 mr-2" />
-          Contact {type === 'request' ? 'Requester' : 'Offerer'}
-        </Button>
+      
+      <CardFooter className="pt-4 border-t flex gap-2">
+        {isOwner ? (
+          <Button 
+            onClick={handleStatusToggle}
+            className="w-full"
+            variant="outline"
+          >
+            Mark as {status === 'Open' || status === 'Available' ? 'Fulfilled' : 'Available'}
+          </Button>
+        ) : (
+          <Button 
+            onClick={handleContact}
+            className="w-full" 
+            disabled={status !== 'Open' && status !== 'Available'}
+          >
+            <MessageCircle className="w-4 h-4 mr-2" />
+            Contact {type === 'request' ? 'Requester' : 'Offerer'}
+          </Button>
+        )}
       </CardFooter>
     </Card>
   );

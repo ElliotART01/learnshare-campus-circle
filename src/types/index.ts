@@ -13,6 +13,7 @@ export interface Request {
   description: string;
   status: 'Open' | 'Fulfilled';
   timestamp: string;
+  imageUrl?: string;
 }
 
 export interface Offer {
@@ -24,4 +25,5 @@ export interface Offer {
   condition: 'Like New' | 'Good' | 'Used';
   status: 'Available' | 'Claimed';
   timestamp: string;
+  imageUrl?: string;
 }
