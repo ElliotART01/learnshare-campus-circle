@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Header } from "@/components/layout/Header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -7,8 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { ItemCard } from "@/components/cards/ItemCard";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
-import { mockRequests, mockOffers } from "@/data/mockData";
-import { Request, Offer } from "@/types";
+import { Request, Offer, storageUtils } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -19,15 +18,9 @@ const Profile = () => {
   const { currentUser, logout } = useAuth();
   const { toast } = useToast();
   
-  // In a real app, we would fetch the user's data from the backend
-  // For this demo, we filter the mock data
-  const [userRequests, setUserRequests] = useState<Request[]>(
-    mockRequests.filter(request => request.studentEmail === currentUser?.email)
-  );
-  
-  const [userOffers, setUserOffers] = useState<Offer[]>(
-    mockOffers.filter(offer => offer.studentEmail === currentUser?.email)
-  );
+  // Initialize with empty arrays
+  const [userRequests, setUserRequests] = useState<Request[]>([]);
+  const [userOffers, setUserOffers] = useState<Offer[]>([]);
   
   const [selectedItem, setSelectedItem] = useState<Request | Offer | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState<boolean>(false);
@@ -35,6 +28,17 @@ const Profile = () => {
   const [editTitle, setEditTitle] = useState('');
   const [editDescription, setEditDescription] = useState('');
   const [claimNotes, setClaimNotes] = useState('');
+  
+  // Load data from localStorage on component mount
+  useEffect(() => {
+    const allRequests = storageUtils.getRequests();
+    const allOffers = storageUtils.getOffers();
+    
+    if (currentUser) {
+      setUserRequests(allRequests.filter(request => request.studentEmail === currentUser.email));
+      setUserOffers(allOffers.filter(offer => offer.studentEmail === currentUser.email));
+    }
+  }, [currentUser]);
   
   const handleLogout = () => {
     logout();
@@ -46,17 +50,29 @@ const Profile = () => {
   
   const handleStatusChange = (id: string, newStatus: string, type: 'request' | 'offer') => {
     if (type === 'request') {
-      setUserRequests(prev => 
-        prev.map(item => 
-          item.id === id ? { ...item, status: newStatus as 'Open' | 'Fulfilled' } : item
-        )
+      const updatedRequests = userRequests.map(item => 
+        item.id === id ? { ...item, status: newStatus as 'Open' | 'Fulfilled' } : item
       );
+      setUserRequests(updatedRequests);
+      
+      // Update in localStorage - need to update all requests, not just user's
+      const allRequests = storageUtils.getRequests();
+      const updatedAllRequests = allRequests.map(item => 
+        item.id === id ? { ...item, status: newStatus as 'Open' | 'Fulfilled' } : item
+      );
+      storageUtils.saveRequests(updatedAllRequests);
     } else {
-      setUserOffers(prev => 
-        prev.map(item => 
-          item.id === id ? { ...item, status: newStatus as 'Available' | 'Claimed' } : item
-        )
+      const updatedOffers = userOffers.map(item => 
+        item.id === id ? { ...item, status: newStatus as 'Available' | 'Claimed' } : item
       );
+      setUserOffers(updatedOffers);
+      
+      // Update in localStorage - need to update all offers, not just user's
+      const allOffers = storageUtils.getOffers();
+      const updatedAllOffers = allOffers.map(item => 
+        item.id === id ? { ...item, status: newStatus as 'Available' | 'Claimed' } : item
+      );
+      storageUtils.saveOffers(updatedAllOffers);
     }
     
     toast({
@@ -75,7 +91,7 @@ const Profile = () => {
   
   const handleClaimClick = (item: Request | Offer) => {
     setSelectedItem(item);
-    setClaimNotes('');
+    setClaimNotes(item.claimNotes || '');
     setDialogMode('claim');
     setIsDialogOpen(true);
   };
@@ -92,21 +108,37 @@ const Profile = () => {
     const isRequest = 'condition' in selectedItem ? false : true;
     
     if (isRequest) {
-      setUserRequests(prev => 
-        prev.map(item => 
-          item.id === selectedItem.id 
-            ? { ...item, title: editTitle, description: editDescription } 
-            : item
-        )
+      const updatedRequests = userRequests.map(item => 
+        item.id === selectedItem.id 
+          ? { ...item, title: editTitle, description: editDescription } 
+          : item
       );
+      setUserRequests(updatedRequests);
+      
+      // Update in localStorage - need to update all requests, not just user's
+      const allRequests = storageUtils.getRequests();
+      const updatedAllRequests = allRequests.map(item => 
+        item.id === selectedItem.id 
+          ? { ...item, title: editTitle, description: editDescription } 
+          : item
+      );
+      storageUtils.saveRequests(updatedAllRequests);
     } else {
-      setUserOffers(prev => 
-        prev.map(item => 
-          item.id === selectedItem.id 
-            ? { ...item, title: editTitle, description: editDescription } 
-            : item
-        )
+      const updatedOffers = userOffers.map(item => 
+        item.id === selectedItem.id 
+          ? { ...item, title: editTitle, description: editDescription } 
+          : item
       );
+      setUserOffers(updatedOffers);
+      
+      // Update in localStorage - need to update all offers, not just user's
+      const allOffers = storageUtils.getOffers();
+      const updatedAllOffers = allOffers.map(item => 
+        item.id === selectedItem.id 
+          ? { ...item, title: editTitle, description: editDescription } 
+          : item
+      );
+      storageUtils.saveOffers(updatedAllOffers);
     }
     
     setIsDialogOpen(false);
@@ -123,31 +155,57 @@ const Profile = () => {
     const newStatus = isRequest ? 'Fulfilled' : 'Claimed';
     
     if (isRequest) {
-      setUserRequests(prev => 
-        prev.map(item => 
-          item.id === selectedItem.id 
-            ? { 
-                ...item, 
-                status: 'Fulfilled', 
-                claimNotes,
-                claimedBy: currentUser?.name || 'Unknown'
-              } 
-            : item
-        )
+      const updatedRequests = userRequests.map(item => 
+        item.id === selectedItem.id 
+          ? { 
+              ...item, 
+              status: 'Fulfilled', 
+              claimNotes,
+              claimedBy: currentUser?.name || 'Unknown'
+            } 
+          : item
       );
+      setUserRequests(updatedRequests);
+      
+      // Update in localStorage - need to update all requests, not just user's
+      const allRequests = storageUtils.getRequests();
+      const updatedAllRequests = allRequests.map(item => 
+        item.id === selectedItem.id 
+          ? { 
+              ...item, 
+              status: 'Fulfilled', 
+              claimNotes,
+              claimedBy: currentUser?.name || 'Unknown'
+            } 
+          : item
+      );
+      storageUtils.saveRequests(updatedAllRequests);
     } else {
-      setUserOffers(prev => 
-        prev.map(item => 
-          item.id === selectedItem.id 
-            ? { 
-                ...item, 
-                status: 'Claimed', 
-                claimNotes,
-                claimedBy: currentUser?.name || 'Unknown'
-              } 
-            : item
-        )
+      const updatedOffers = userOffers.map(item => 
+        item.id === selectedItem.id 
+          ? { 
+              ...item, 
+              status: 'Claimed', 
+              claimNotes,
+              claimedBy: currentUser?.name || 'Unknown'
+            } 
+          : item
       );
+      setUserOffers(updatedOffers);
+      
+      // Update in localStorage - need to update all offers, not just user's
+      const allOffers = storageUtils.getOffers();
+      const updatedAllOffers = allOffers.map(item => 
+        item.id === selectedItem.id 
+          ? { 
+              ...item, 
+              status: 'Claimed', 
+              claimNotes,
+              claimedBy: currentUser?.name || 'Unknown'
+            } 
+          : item
+      );
+      storageUtils.saveOffers(updatedAllOffers);
     }
     
     setIsDialogOpen(false);
@@ -163,9 +221,21 @@ const Profile = () => {
     const isRequest = 'condition' in selectedItem ? false : true;
     
     if (isRequest) {
-      setUserRequests(prev => prev.filter(item => item.id !== selectedItem.id));
+      const updatedRequests = userRequests.filter(item => item.id !== selectedItem.id);
+      setUserRequests(updatedRequests);
+      
+      // Update in localStorage - need to update all requests, not just user's
+      const allRequests = storageUtils.getRequests();
+      const updatedAllRequests = allRequests.filter(item => item.id !== selectedItem.id);
+      storageUtils.saveRequests(updatedAllRequests);
     } else {
-      setUserOffers(prev => prev.filter(item => item.id !== selectedItem.id));
+      const updatedOffers = userOffers.filter(item => item.id !== selectedItem.id);
+      setUserOffers(updatedOffers);
+      
+      // Update in localStorage - need to update all offers, not just user's
+      const allOffers = storageUtils.getOffers();
+      const updatedAllOffers = allOffers.filter(item => item.id !== selectedItem.id);
+      storageUtils.saveOffers(updatedAllOffers);
     }
     
     setIsDialogOpen(false);

@@ -38,3 +38,31 @@ export interface User {
   phone?: string;
 }
 
+// Local Storage Keys
+export const STORAGE_KEYS = {
+  REQUESTS: 'campus_circle_requests',
+  OFFERS: 'campus_circle_offers'
+};
+
+// Local Storage Utility Functions
+export const storageUtils = {
+  // Requests
+  saveRequests: (requests: Request[]): void => {
+    localStorage.setItem(STORAGE_KEYS.REQUESTS, JSON.stringify(requests));
+  },
+  
+  getRequests: (): Request[] => {
+    const data = localStorage.getItem(STORAGE_KEYS.REQUESTS);
+    return data ? JSON.parse(data) : [];
+  },
+  
+  // Offers
+  saveOffers: (offers: Offer[]): void => {
+    localStorage.setItem(STORAGE_KEYS.OFFERS, JSON.stringify(offers));
+  },
+  
+  getOffers: (): Offer[] => {
+    const data = localStorage.getItem(STORAGE_KEYS.OFFERS);
+    return data ? JSON.parse(data) : [];
+  }
+};

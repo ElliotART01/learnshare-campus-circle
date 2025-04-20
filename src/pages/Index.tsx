@@ -6,17 +6,40 @@ import { ItemForm } from "@/components/forms/ItemForm";
 import { RequestsList } from "@/components/sections/RequestsList";
 import { OffersList } from "@/components/sections/OffersList";
 import { mockRequests, mockOffers } from "@/data/mockData";
-import { Request, Offer } from "@/types";
+import { Request, Offer, storageUtils } from "@/types";
 import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("browse-offers");
-  const [requests, setRequests] = useState<Request[]>(mockRequests);
-  const [offers, setOffers] = useState<Offer[]>(mockOffers);
+  const [requests, setRequests] = useState<Request[]>([]);
+  const [offers, setOffers] = useState<Offer[]>([]);
   const { currentUser } = useAuth();
   const { toast } = useToast();
+
+  // Load data from localStorage on component mount
+  useEffect(() => {
+    // Initialize with localStorage data if available, otherwise use mock data
+    const storedRequests = storageUtils.getRequests();
+    const storedOffers = storageUtils.getOffers();
+    
+    setRequests(storedRequests.length > 0 ? storedRequests : mockRequests);
+    setOffers(storedOffers.length > 0 ? storedOffers : mockOffers);
+  }, []);
+
+  // Save data to localStorage whenever it changes
+  useEffect(() => {
+    if (requests.length > 0) {
+      storageUtils.saveRequests(requests);
+    }
+  }, [requests]);
+
+  useEffect(() => {
+    if (offers.length > 0) {
+      storageUtils.saveOffers(offers);
+    }
+  }, [offers]);
 
   const handleFormSubmitSuccess = (data: any, type: 'request' | 'offer') => {
     if (!currentUser) {
@@ -42,7 +65,9 @@ const Index = () => {
         imageUrl: data.imageUrl
       };
       
-      setRequests(prevRequests => [...prevRequests, newRequest]);
+      const updatedRequests = [...requests, newRequest];
+      setRequests(updatedRequests);
+      storageUtils.saveRequests(updatedRequests); // Immediately save to localStorage
       setActiveTab("browse-requests");
       
       toast({
@@ -62,7 +87,9 @@ const Index = () => {
         imageUrl: data.imageUrl
       };
       
-      setOffers(prevOffers => [...prevOffers, newOffer]);
+      const updatedOffers = [...offers, newOffer];
+      setOffers(updatedOffers);
+      storageUtils.saveOffers(updatedOffers); // Immediately save to localStorage
       setActiveTab("browse-offers");
       
       toast({

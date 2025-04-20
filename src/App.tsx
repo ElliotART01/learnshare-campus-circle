@@ -13,6 +13,7 @@ import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import { useAuth } from "./context/AuthContext";
 
+// Initialize QueryClient outside component to avoid recreation on rerenders
 const queryClient = new QueryClient();
 
 // Protected route component
