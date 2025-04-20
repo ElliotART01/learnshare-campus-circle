@@ -1,5 +1,5 @@
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Header } from "@/components/layout/Header";
 import { ItemForm } from "@/components/forms/ItemForm";
@@ -8,20 +8,33 @@ import { OffersList } from "@/components/sections/OffersList";
 import { mockRequests, mockOffers } from "@/data/mockData";
 import { Request, Offer } from "@/types";
 import { v4 as uuidv4 } from 'uuid';
+import { useAuth } from '@/context/AuthContext';
+import { useToast } from '@/hooks/use-toast';
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("browse-offers");
   const [requests, setRequests] = useState<Request[]>(mockRequests);
   const [offers, setOffers] = useState<Offer[]>(mockOffers);
+  const { currentUser } = useAuth();
+  const { toast } = useToast();
 
   const handleFormSubmitSuccess = (data: any, type: 'request' | 'offer') => {
+    if (!currentUser) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to create a post.",
+        variant: "destructive",
+      });
+      return;
+    }
+    
     const timestamp = new Date().toISOString();
     
     if (type === 'request') {
       const newRequest: Request = {
         id: uuidv4(),
-        studentEmail: data.studentEmail,
-        studentName: data.studentName,
+        studentEmail: currentUser.email,
+        studentName: currentUser.name,
         title: data.title,
         description: data.description,
         status: 'Open',
@@ -31,11 +44,16 @@ const Index = () => {
       
       setRequests(prevRequests => [...prevRequests, newRequest]);
       setActiveTab("browse-requests");
+      
+      toast({
+        title: "Request created",
+        description: "Your request has been successfully posted.",
+      });
     } else if (type === 'offer') {
       const newOffer: Offer = {
         id: uuidv4(),
-        studentEmail: data.studentEmail,
-        studentName: data.studentName,
+        studentEmail: currentUser.email,
+        studentName: currentUser.name,
         title: data.title,
         description: data.description,
         condition: data.condition,
@@ -46,6 +64,11 @@ const Index = () => {
       
       setOffers(prevOffers => [...prevOffers, newOffer]);
       setActiveTab("browse-offers");
+      
+      toast({
+        title: "Offer created",
+        description: "Your offer has been successfully posted.",
+      });
     }
   };
 

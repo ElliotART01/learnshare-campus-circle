@@ -3,8 +3,10 @@ import React from 'react';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { MessageCircle } from 'lucide-react';
+import { MessageCircle, Edit, Trash2, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
 
 interface ItemCardProps {
   id: string;
@@ -36,6 +38,8 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   onStatusChange
 }) => {
   const { toast } = useToast();
+  const navigate = useNavigate();
+  const { isAuthenticated } = useAuth();
   
   const date = new Date(timestamp);
   const formattedDate = date.toLocaleDateString('en-US', { 
@@ -45,6 +49,16 @@ export const ItemCard: React.FC<ItemCardProps> = ({
   });
   
   const handleContact = () => {
+    if (!isAuthenticated) {
+      toast({
+        title: "Authentication required",
+        description: "Please log in to contact other users.",
+        variant: "destructive",
+      });
+      navigate('/login');
+      return;
+    }
+    
     window.location.href = `mailto:${studentEmail}?subject=Regarding your ${type}: ${title}`;
     toast({
       title: "Contact initiated",
@@ -115,8 +129,9 @@ export const ItemCard: React.FC<ItemCardProps> = ({
           <Button 
             onClick={handleStatusToggle}
             className="w-full"
-            variant="outline"
+            variant={status === 'Open' || status === 'Available' ? 'default' : 'outline'}
           >
+            <Check className="w-4 h-4 mr-2" />
             Mark as {status === 'Open' || status === 'Available' ? 'Fulfilled' : 'Available'}
           </Button>
         ) : (

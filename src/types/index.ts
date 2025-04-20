@@ -14,6 +14,8 @@ export interface Request {
   status: 'Open' | 'Fulfilled';
   timestamp: string;
   imageUrl?: string;
+  claimedBy?: string;
+  claimNotes?: string;
 }
 
 export interface Offer {
@@ -26,4 +28,13 @@ export interface Offer {
   status: 'Available' | 'Claimed';
   timestamp: string;
   imageUrl?: string;
+  claimedBy?: string;
+  claimNotes?: string;
 }
+
+export interface User {
+  email: string;
+  name: string;
+  phone?: string;
+}
+
