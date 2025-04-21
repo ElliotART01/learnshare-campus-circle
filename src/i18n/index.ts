@@ -44,6 +44,36 @@ const resources = {
         "Other"
       ]
     },
+    login: {
+      title: "Welcome back",
+      description: "Sign in to your account",
+      email: "Email",
+      emailPlaceholder: "your.email@example.com",
+      password: "Password",
+      forgotPassword: "Forgot password?",
+      submit: "Sign in",
+      noAccount: "Don't have an account?",
+      signup: "Sign up"
+    },
+    common: {
+      home: "Home",
+      about: "About",
+      profile: "Profile",
+      settings: "Settings",
+      logout: "Logout",
+      login: "Log in",
+      signup: "Sign up",
+      loading: "Loading...",
+      save: "Save",
+      cancel: "Cancel",
+      delete: "Delete",
+      edit: "Edit",
+      search: "Search",
+      noResults: "No results found",
+      error: "An error occurred",
+      success: "Success",
+      welcome: "Welcome"
+    },
     language: "عربي",
     darkMode: "Dark",
     lightMode: "Light"
@@ -91,6 +121,36 @@ const resources = {
         "الآداب",
         "أخرى"
       ]
+    },
+    login: {
+      title: "مرحباً بعودتك",
+      description: "تسجيل الدخول إلى حسابك",
+      email: "البريد الإلكتروني",
+      emailPlaceholder: "بريدك@مثال.كوم",
+      password: "كلمة المرور",
+      forgotPassword: "نسيت كلمة المرور؟",
+      submit: "تسجيل الدخول",
+      noAccount: "ليس لديك حساب؟",
+      signup: "إنشاء حساب"
+    },
+    common: {
+      home: "الرئيسية",
+      about: "عن الموقع",
+      profile: "الملف الشخصي",
+      settings: "الإعدادات",
+      logout: "تسجيل الخروج",
+      login: "تسجيل الدخول",
+      signup: "إنشاء حساب",
+      loading: "جاري التحميل...",
+      save: "حفظ",
+      cancel: "إلغاء",
+      delete: "حذف",
+      edit: "تعديل",
+      search: "بحث",
+      noResults: "لم يتم العثور على نتائج",
+      error: "حدث خطأ",
+      success: "تم بنجاح",
+      welcome: "مرحباً"
     },
     language: "English",
     darkMode: "الوضع الليلي",

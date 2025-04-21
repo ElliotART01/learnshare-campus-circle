@@ -91,26 +91,73 @@
 
   body {
     @apply bg-background text-foreground;
+    transition: background-color 0.3s ease, color 0.3s ease;
   }
 }
 
+/* RTL Layout Support */
 .rtl {
   direction: rtl;
   text-align: right;
 }
 
+/* Improved RTL support for flex layouts */
 .rtl .flex {
   flex-direction: row-reverse;
 }
 
+/* Fixes for spacing in RTL mode */
 .rtl .space-x-2 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 1;
+  margin-left: calc(0.5rem * var(--tw-space-x-reverse));
+  margin-right: calc(0.5rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .rtl .space-x-4 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 1;
+  margin-left: calc(1rem * var(--tw-space-x-reverse));
+  margin-right: calc(1rem * calc(1 - var(--tw-space-x-reverse)));
 }
 
 .rtl .space-x-6 > :not([hidden]) ~ :not([hidden]) {
   --tw-space-x-reverse: 1;
+  margin-left: calc(1.5rem * var(--tw-space-x-reverse));
+  margin-right: calc(1.5rem * calc(1 - var(--tw-space-x-reverse)));
+}
+
+/* RTL support for form components */
+.rtl .form-label {
+  text-align: right;
+}
+
+/* RTL form component alignment */
+.rtl .form-control {
+  text-align: right;
+}
+
+/* RTL margin fixes */
+.rtl .ml-auto {
+  margin-left: 0;
+  margin-right: auto;
+}
+
+.rtl .mr-auto {
+  margin-right: 0;
+  margin-left: auto;
+}
+
+/* RTL padding fixes */
+.rtl .pl-4 {
+  padding-left: 0;
+  padding-right: 1rem;
+}
+
+.rtl .pr-4 {
+  padding-right: 0;
+  padding-left: 1rem;
+}
+
+/* Smooth dark mode transitions */
+.dark-mode-transition {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
 }

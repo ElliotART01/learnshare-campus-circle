@@ -63,10 +63,12 @@ const AppWithAuth = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <ThemeProvider attribute="class">
+    <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
       <AuthProvider>
         <LanguageProvider>
-          <AppWithAuth />
+          <div className="dark-mode-transition">
+            <AppWithAuth />
+          </div>
         </LanguageProvider>
       </AuthProvider>
     </ThemeProvider>
