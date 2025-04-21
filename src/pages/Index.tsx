@@ -105,7 +105,7 @@ const Index = () => {
       
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="text-center mb-10">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Naran Univrsity Cyrcling</h1>
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Naran Univrsity Cycling</h1>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
             Connect with fellow students to exchange educational materials. 
             Request what you need or offer what you no longer use.
