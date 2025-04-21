@@ -9,7 +9,7 @@ const About = () => {
       
       <main className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-sm p-8">
-          <h1 className="text-3xl font-bold text-center mb-8">About Campus Circle</h1>
+          <h1 className="text-3xl font-bold text-center mb-8">About Najran University Cycling</h1>
           
           <div className="space-y-6">
             <section>
