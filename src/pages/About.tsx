@@ -15,7 +15,7 @@ const About = () => {
             <section>
               <h2 className="text-xl font-semibold text-primary-medium mb-3">Our Mission</h2>
               <p className="text-gray-700">
-                Campus Circle aims to create a sustainable and supportive community of students by facilitating 
+                NUC aims to create a sustainable and supportive community of students by facilitating 
                 the exchange of educational materials. We believe that by sharing resources, students can reduce 
                 waste, save money, and build meaningful connections within their campus community.
               </p>
