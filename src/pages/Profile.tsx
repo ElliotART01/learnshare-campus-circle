@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { Header } from "@/components/layout/Header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -12,10 +13,12 @@ import { Dialog, DialogTrigger, DialogContent, DialogHeader, DialogTitle, Dialog
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Badge } from "@/components/ui/badge";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Profile = () => {
   const { currentUser, logout } = useAuth();
   const { toast } = useToast();
+  const { language } = useLanguage();
   
   const [userRequests, setUserRequests] = useState<Request[]>([]);
   const [userOffers, setUserOffers] = useState<Offer[]>([]);
@@ -145,14 +148,13 @@ const Profile = () => {
     if (!selectedItem) return;
     
     const isRequest = 'condition' in selectedItem ? false : true;
-    const newStatus = isRequest ? 'Fulfilled' : 'Claimed';
     
     if (isRequest) {
       const updatedRequests = userRequests.map(item => 
         item.id === selectedItem.id 
           ? { 
               ...item, 
-              status: 'Fulfilled', 
+              status: 'Fulfilled' as const, 
               claimNotes,
               claimedBy: currentUser?.name || 'Unknown'
             } 
@@ -165,7 +167,7 @@ const Profile = () => {
         item.id === selectedItem.id 
           ? { 
               ...item, 
-              status: 'Fulfilled', 
+              status: 'Fulfilled' as const, 
               claimNotes,
               claimedBy: currentUser?.name || 'Unknown'
             } 
@@ -177,7 +179,7 @@ const Profile = () => {
         item.id === selectedItem.id 
           ? { 
               ...item, 
-              status: 'Claimed', 
+              status: 'Claimed' as const, 
               claimNotes,
               claimedBy: currentUser?.name || 'Unknown'
             } 
@@ -190,7 +192,7 @@ const Profile = () => {
         item.id === selectedItem.id 
           ? { 
               ...item, 
-              status: 'Claimed', 
+              status: 'Claimed' as const, 
               claimNotes,
               claimedBy: currentUser?.name || 'Unknown'
             } 
@@ -202,7 +204,7 @@ const Profile = () => {
     setIsDialogOpen(false);
     toast({
       title: "Status updated",
-      description: `Item marked as ${newStatus} with notes.`,
+      description: `Item marked as ${isRequest ? 'Fulfilled' : 'Claimed'} with notes.`,
     });
   };
   
@@ -239,7 +241,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen bg-gray-50 dark:bg-background ${language === "ar" ? "rtl" : ""}`}>
       <Header />
 
       <main className="max-w-7xl mx-auto px-4 py-8">
@@ -252,12 +254,12 @@ const Profile = () => {
             </Avatar>
             <div>
               <h1 className="text-2xl font-bold">{currentUser?.name}</h1>
-              <p className="text-gray-600">{currentUser?.email}</p>
+              <p className="text-gray-600 dark:text-gray-300">{currentUser?.email}</p>
 
-              <div className="mt-3 space-y-1 text-sm rounded bg-white shadow px-4 py-2 border border-gray-200">
-                <p><span className="font-medium">Major:</span> {currentUser?.major || <span className="italic text-gray-400">Not set</span>}</p>
-                <p><span className="font-medium">Age:</span> {currentUser?.age ? currentUser.age : <span className="italic text-gray-400">Not set</span>}</p>
-                <p><span className="font-medium">Gender:</span> {currentUser?.gender ? currentUser.gender : <span className="italic text-gray-400">Not set</span>}</p>
+              <div className="mt-3 space-y-1 text-sm rounded bg-white dark:bg-secondary/20 shadow px-4 py-2 border border-gray-200 dark:border-gray-700">
+                <p><span className="font-medium">Major:</span> {currentUser?.major || <span className="italic text-gray-400 dark:text-gray-500">Not set</span>}</p>
+                <p><span className="font-medium">Age:</span> {currentUser?.age ? currentUser.age : <span className="italic text-gray-400 dark:text-gray-500">Not set</span>}</p>
+                <p><span className="font-medium">Gender:</span> {currentUser?.gender ? currentUser.gender : <span className="italic text-gray-400 dark:text-gray-500">Not set</span>}</p>
               </div>
             </div>
           </div>
@@ -273,25 +275,25 @@ const Profile = () => {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
-              <div className="p-4 rounded-md bg-gray-100">
+              <div className="p-4 rounded-md bg-gray-100 dark:bg-secondary/20">
                 <p className="text-2xl font-bold">{userRequests.length}</p>
-                <p className="text-sm text-gray-600">Requests</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Requests</p>
               </div>
-              <div className="p-4 rounded-md bg-gray-100">
+              <div className="p-4 rounded-md bg-gray-100 dark:bg-secondary/20">
                 <p className="text-2xl font-bold">{userOffers.length}</p>
-                <p className="text-sm text-gray-600">Offers</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Offers</p>
               </div>
-              <div className="p-4 rounded-md bg-gray-100">
+              <div className="p-4 rounded-md bg-gray-100 dark:bg-secondary/20">
                 <p className="text-2xl font-bold">
                   {userRequests.filter(req => req.status === 'Fulfilled').length}
                 </p>
-                <p className="text-sm text-gray-600">Fulfilled</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Fulfilled</p>
               </div>
-              <div className="p-4 rounded-md bg-gray-100">
+              <div className="p-4 rounded-md bg-gray-100 dark:bg-secondary/20">
                 <p className="text-2xl font-bold">
                   {userOffers.filter(offer => offer.status === 'Claimed').length}
                 </p>
-                <p className="text-sm text-gray-600">Claimed</p>
+                <p className="text-sm text-gray-600 dark:text-gray-300">Claimed</p>
               </div>
             </div>
           </CardContent>
@@ -306,7 +308,7 @@ const Profile = () => {
           <TabsContent value="requests" className="mt-6">
             {userRequests.length === 0 ? (
               <div className="text-center py-10">
-                <p className="text-gray-500">You haven't created any requests yet.</p>
+                <p className="text-gray-500 dark:text-gray-400">You haven't created any requests yet.</p>
               </div>
             ) : (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -353,7 +355,7 @@ const Profile = () => {
                       </Button>
                     </div>
                     {request.claimNotes && (
-                      <div className="mt-2 p-2 bg-gray-100 rounded text-sm">
+                      <div className="mt-2 p-2 bg-gray-100 dark:bg-secondary/20 rounded text-sm">
                         <p className="font-medium">Notes:</p>
                         <p>{request.claimNotes}</p>
                       </div>
@@ -367,7 +369,7 @@ const Profile = () => {
           <TabsContent value="offers" className="mt-6">
             {userOffers.length === 0 ? (
               <div className="text-center py-10">
-                <p className="text-gray-500">You haven't created any offers yet.</p>
+                <p className="text-gray-500 dark:text-gray-400">You haven't created any offers yet.</p>
               </div>
             ) : (
               <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -415,7 +417,7 @@ const Profile = () => {
                       </Button>
                     </div>
                     {offer.claimNotes && (
-                      <div className="mt-2 p-2 bg-gray-100 rounded text-sm">
+                      <div className="mt-2 p-2 bg-gray-100 dark:bg-secondary/20 rounded text-sm">
                         <p className="font-medium">Notes:</p>
                         <p>{offer.claimNotes}</p>
                       </div>
@@ -446,7 +448,7 @@ const Profile = () => {
           {dialogMode === 'edit' && (
             <div className="space-y-4">
               <div>
-                <label htmlFor="title" className="block text-sm font-medium text-gray-700">Title</label>
+                <label htmlFor="title" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Title</label>
                 <Input 
                   id="title" 
                   value={editTitle} 
@@ -454,7 +456,7 @@ const Profile = () => {
                 />
               </div>
               <div>
-                <label htmlFor="description" className="block text-sm font-medium text-gray-700">Description</label>
+                <label htmlFor="description" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Description</label>
                 <Textarea 
                   id="description" 
                   value={editDescription} 
@@ -467,7 +469,7 @@ const Profile = () => {
           
           {dialogMode === 'claim' && (
             <div>
-              <label htmlFor="claimNotes" className="block text-sm font-medium text-gray-700">Claim Notes</label>
+              <label htmlFor="claimNotes" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Claim Notes</label>
               <Textarea 
                 id="claimNotes" 
                 value={claimNotes} 

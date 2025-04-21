@@ -1,3 +1,4 @@
+
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -7,11 +8,12 @@ import Index from "./pages/Index";
 import About from "./pages/About";
 import NotFound from "./pages/NotFound";
 import { AuthProvider } from "./context/AuthContext";
+import { LanguageProvider } from "./context/LanguageContext";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
 import { useAuth } from "./context/AuthContext";
-import { LanguageProvider } from "./context/LanguageContext";
+import { ThemeProvider } from "next-themes";
 
 // Initialize QueryClient outside component to avoid recreation on rerenders
 const queryClient = new QueryClient();
@@ -61,11 +63,13 @@ const AppWithAuth = () => {
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
-    <AuthProvider>
-      <LanguageProvider>
-        <AppWithAuth />
-      </LanguageProvider>
-    </AuthProvider>
+    <ThemeProvider attribute="class">
+      <AuthProvider>
+        <LanguageProvider>
+          <AppWithAuth />
+        </LanguageProvider>
+      </AuthProvider>
+    </ThemeProvider>
   </QueryClientProvider>
 );
 
