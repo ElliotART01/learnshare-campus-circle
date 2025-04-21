@@ -1,11 +1,18 @@
 
 import React, { createContext, useState, useContext, useEffect } from 'react';
-import { User } from '@/types';
+import { User, Gender } from '@/types';
 
 interface AuthContextType {
   currentUser: User | null;
   login: (email: string, password: string) => Promise<void>;
-  signup: (name: string, email: string, password: string) => Promise<void>;
+  signup: (
+    name: string,
+    email: string,
+    password: string,
+    major: string,
+    age?: number,
+    gender?: Gender
+  ) => Promise<void>;
   logout: () => void;
   isAuthenticated: boolean;
 }
@@ -39,38 +46,48 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }, []);
 
   const login = async (email: string, password: string) => {
-    // This is a mock implementation. In a real app, you would verify with a backend
-    // For demo purposes, we'll create a user with the provided email
-    // In production: Implement proper authentication here
-    
     if (!email || !password) {
       throw new Error('Email and password are required');
     }
-    
-    // Mock user authentication
-    const user: User = {
-      email,
-      name: email.split('@')[0], // Simple name derivation from email
-    };
-    
+    // Retrieve user info from "database" (mocked)
+    const storedUser = localStorage.getItem('campusCircleUser');
+    let user: User | null = null;
+    if (storedUser) {
+      const parsed = JSON.parse(storedUser);
+      if (parsed.email === email) {
+        user = parsed;
+      }
+    }
+    if (!user) {
+      user = {
+        email,
+        name: email.split('@')[0],
+        major: '',
+      };
+    }
     setCurrentUser(user);
     setIsAuthenticated(true);
     localStorage.setItem('campusCircleUser', JSON.stringify(user));
   };
 
-  const signup = async (name: string, email: string, password: string) => {
-    // Mock signup - in a real app, this would send data to your backend
-    // For demo purposes, we'll create and "store" the user locally
-    
-    if (!name || !email || !password) {
-      throw new Error('Name, email, and password are required');
+  const signup = async (
+    name: string,
+    email: string,
+    password: string,
+    major: string,
+    age?: number,
+    gender?: Gender
+  ) => {
+    if (!name || !email || !password || !major) {
+      throw new Error('Name, email, password, and major are required');
     }
-    
     const user: User = {
       email,
       name,
+      major,
+      age,
+      gender,
     };
-    
     setCurrentUser(user);
     setIsAuthenticated(true);
     localStorage.setItem('campusCircleUser', JSON.stringify(user));
@@ -92,4 +109,3 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
-

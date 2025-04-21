@@ -1,8 +1,18 @@
-
 export interface Student {
   email: string;
   name: string;
   phone?: string;
+}
+
+export type Gender = "Male" | "Female" | "Other" | "Prefer not to say";
+
+export interface User {
+  email: string;
+  name: string;
+  phone?: string;
+  major: string;
+  age?: number;
+  gender?: Gender;
 }
 
 export interface Request {
@@ -30,12 +40,6 @@ export interface Offer {
   imageUrl?: string;
   claimedBy?: string;
   claimNotes?: string;
-}
-
-export interface User {
-  email: string;
-  name: string;
-  phone?: string;
 }
 
 // Local Storage Keys

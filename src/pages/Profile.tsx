@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { Header } from "@/components/layout/Header";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -18,7 +17,6 @@ const Profile = () => {
   const { currentUser, logout } = useAuth();
   const { toast } = useToast();
   
-  // Initialize with empty arrays
   const [userRequests, setUserRequests] = useState<Request[]>([]);
   const [userOffers, setUserOffers] = useState<Offer[]>([]);
   
@@ -29,7 +27,6 @@ const Profile = () => {
   const [editDescription, setEditDescription] = useState('');
   const [claimNotes, setClaimNotes] = useState('');
   
-  // Load data from localStorage on component mount
   useEffect(() => {
     const allRequests = storageUtils.getRequests();
     const allOffers = storageUtils.getOffers();
@@ -55,7 +52,6 @@ const Profile = () => {
       );
       setUserRequests(updatedRequests);
       
-      // Update in localStorage - need to update all requests, not just user's
       const allRequests = storageUtils.getRequests();
       const updatedAllRequests = allRequests.map(item => 
         item.id === id ? { ...item, status: newStatus as 'Open' | 'Fulfilled' } : item
@@ -67,7 +63,6 @@ const Profile = () => {
       );
       setUserOffers(updatedOffers);
       
-      // Update in localStorage - need to update all offers, not just user's
       const allOffers = storageUtils.getOffers();
       const updatedAllOffers = allOffers.map(item => 
         item.id === id ? { ...item, status: newStatus as 'Available' | 'Claimed' } : item
@@ -115,7 +110,6 @@ const Profile = () => {
       );
       setUserRequests(updatedRequests);
       
-      // Update in localStorage - need to update all requests, not just user's
       const allRequests = storageUtils.getRequests();
       const updatedAllRequests = allRequests.map(item => 
         item.id === selectedItem.id 
@@ -131,7 +125,6 @@ const Profile = () => {
       );
       setUserOffers(updatedOffers);
       
-      // Update in localStorage - need to update all offers, not just user's
       const allOffers = storageUtils.getOffers();
       const updatedAllOffers = allOffers.map(item => 
         item.id === selectedItem.id 
@@ -167,7 +160,6 @@ const Profile = () => {
       );
       setUserRequests(updatedRequests);
       
-      // Update in localStorage - need to update all requests, not just user's
       const allRequests = storageUtils.getRequests();
       const updatedAllRequests = allRequests.map(item => 
         item.id === selectedItem.id 
@@ -193,7 +185,6 @@ const Profile = () => {
       );
       setUserOffers(updatedOffers);
       
-      // Update in localStorage - need to update all offers, not just user's
       const allOffers = storageUtils.getOffers();
       const updatedAllOffers = allOffers.map(item => 
         item.id === selectedItem.id 
@@ -224,7 +215,6 @@ const Profile = () => {
       const updatedRequests = userRequests.filter(item => item.id !== selectedItem.id);
       setUserRequests(updatedRequests);
       
-      // Update in localStorage - need to update all requests, not just user's
       const allRequests = storageUtils.getRequests();
       const updatedAllRequests = allRequests.filter(item => item.id !== selectedItem.id);
       storageUtils.saveRequests(updatedAllRequests);
@@ -232,7 +222,6 @@ const Profile = () => {
       const updatedOffers = userOffers.filter(item => item.id !== selectedItem.id);
       setUserOffers(updatedOffers);
       
-      // Update in localStorage - need to update all offers, not just user's
       const allOffers = storageUtils.getOffers();
       const updatedAllOffers = allOffers.filter(item => item.id !== selectedItem.id);
       storageUtils.saveOffers(updatedAllOffers);
@@ -245,7 +234,6 @@ const Profile = () => {
     });
   };
 
-  // Get the first letter of the user's name for the avatar fallback
   const getNameInitial = (name: string) => {
     return name?.charAt(0).toUpperCase() || '?';
   };
@@ -253,7 +241,7 @@ const Profile = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex flex-col md:flex-row md:items-center justify-between mb-8">
           <div className="flex items-center gap-4 mb-4 md:mb-0">
@@ -265,9 +253,15 @@ const Profile = () => {
             <div>
               <h1 className="text-2xl font-bold">{currentUser?.name}</h1>
               <p className="text-gray-600">{currentUser?.email}</p>
+
+              <div className="mt-3 space-y-1 text-sm rounded bg-white shadow px-4 py-2 border border-gray-200">
+                <p><span className="font-medium">Major:</span> {currentUser?.major || <span className="italic text-gray-400">Not set</span>}</p>
+                <p><span className="font-medium">Age:</span> {currentUser?.age ? currentUser.age : <span className="italic text-gray-400">Not set</span>}</p>
+                <p><span className="font-medium">Gender:</span> {currentUser?.gender ? currentUser.gender : <span className="italic text-gray-400">Not set</span>}</p>
+              </div>
             </div>
           </div>
-          
+
           <Button variant="outline" onClick={handleLogout}>
             Log out
           </Button>
@@ -434,7 +428,6 @@ const Profile = () => {
         </Tabs>
       </main>
       
-      {/* Edit/Claim/Delete Dialog */}
       <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
         <DialogContent>
           <DialogHeader>
