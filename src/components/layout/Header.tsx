@@ -1,10 +1,10 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Book, User } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 import { Button } from '@/components/ui/button';
 import { Avatar, AvatarFallback } from '@/components/ui/avatar';
+import Logo from './Logo';
 
 export const Header = () => {
   const { currentUser, isAuthenticated } = useAuth();
@@ -17,9 +17,8 @@ export const Header = () => {
   return (
     <header className="bg-white shadow-sm">
       <div className="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
-        <Link to="/" className="flex items-center space-x-2 text-primary-medium">
-          <Book size={28} />
-          <span className="text-xl font-bold">Campus Circle</span>
+        <Link to="/" className="flex items-center space-x-2">
+          <Logo size={48} />
         </Link>
         
         <div className="flex items-center space-x-6">
