@@ -17,12 +17,18 @@ export const Logo = ({
         height={Math.round(size * (317 / 285))}
         className="object-contain rounded-sm mb-1"
         draggable={false}
-        style={{ pointerEvents: "none", userSelect: "none", maxWidth: size, height: "auto" }}
+        style={{
+          pointerEvents: "none",
+          userSelect: "none",
+          maxWidth: size,
+          height: "auto"
+        }}
       />
       {withText && (
         <span
           className="tracking-widest font-black text-lg text-primary-dark"
           style={{ letterSpacing: "0.3em" }}
+          dir="auto"
         >
           NUC
         </span>

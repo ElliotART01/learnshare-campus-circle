@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -12,8 +11,9 @@ import { Header } from "@/components/layout/Header";
 import { useAuth } from "@/context/AuthContext";
 import { useToast } from "@/hooks/use-toast";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { useLanguage } from "@/context/LanguageContext";
+import { t } from "@/i18n/index";
 
-// Najran University Majors
 const majorsList = [
   "Engineering",
   "Computer Science",
@@ -73,6 +73,10 @@ const Signup = () => {
   const { signup } = useAuth();
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const { language } = useLanguage();
+
+  const majorsList = t(language, "signup.majors");
+  const genderList = t(language, "signup.genderList");
 
   const form = useForm<SignupFormValues>({
     resolver: zodResolver(signupSchema),
@@ -115,15 +119,15 @@ const Signup = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className={`min-h-screen bg-gray-50 dark:bg-background ${language === "ar" ? "rtl" : ""}`}>
       <Header />
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="max-w-md mx-auto mt-8">
           <Card>
             <CardHeader>
-              <CardTitle>Create an account</CardTitle>
+              <CardTitle>{t(language, "signup.title")}</CardTitle>
               <CardDescription>
-                Sign up to start sharing and requesting educational materials
+                {t(language, "signup.description")}
               </CardDescription>
             </CardHeader>
             <CardContent>
@@ -134,9 +138,9 @@ const Signup = () => {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Full Name</FormLabel>
+                        <FormLabel>{t(language, "signup.name")}</FormLabel>
                         <FormControl>
-                          <Input placeholder="John Doe" {...field} />
+                          <Input placeholder={t(language, "signup.namePlaceholder")} {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -148,10 +152,10 @@ const Signup = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>{t(language, "signup.email")}</FormLabel>
                         <FormControl>
                           <Input 
-                            placeholder="your.email@example.com" 
+                            placeholder={t(language, "signup.emailPlaceholder")}
                             type="email" 
                             {...field} 
                           />
@@ -166,18 +170,18 @@ const Signup = () => {
                     name="major"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Major</FormLabel>
+                        <FormLabel>{t(language, "signup.major")}</FormLabel>
                         <Select 
                           onValueChange={field.onChange}
                           value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select your major" />
+                              <SelectValue placeholder={t(language, "signup.majorPlaceholder")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {majorsList.map((major, idx) => (
+                            {majorsList.map((major: string, idx: number) => (
                               <SelectItem value={major} key={idx}>
                                 {major}
                               </SelectItem>
@@ -194,10 +198,10 @@ const Signup = () => {
                     name="age"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Age (optional)</FormLabel>
+                        <FormLabel>{t(language, "signup.age")}</FormLabel>
                         <FormControl>
                           <Input 
-                            placeholder="E.g. 21" 
+                            placeholder={t(language, "signup.agePlaceholder")}
                             type="number"
                             min={18}
                             max={100}
@@ -214,18 +218,18 @@ const Signup = () => {
                     name="gender"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Gender</FormLabel>
+                        <FormLabel>{t(language, "signup.gender")}</FormLabel>
                         <Select
                           onValueChange={field.onChange}
                           value={field.value}
                         >
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="Select your gender" />
+                              <SelectValue placeholder={t(language, "signup.genderPlaceholder")} />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            {genderList.map((gender) => (
+                            {genderList.map((gender: any) => (
                               <SelectItem value={gender.value} key={gender.value}>
                                 {gender.label}
                               </SelectItem>
@@ -242,7 +246,7 @@ const Signup = () => {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>{t(language, "signup.password")}</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="••••••••" 
@@ -260,7 +264,7 @@ const Signup = () => {
                     name="confirmPassword"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Confirm Password</FormLabel>
+                        <FormLabel>{t(language, "signup.confirmPassword")}</FormLabel>
                         <FormControl>
                           <Input 
                             placeholder="••••••••" 
@@ -278,16 +282,16 @@ const Signup = () => {
                     className="w-full" 
                     disabled={isLoading}
                   >
-                    {isLoading ? "Creating account..." : "Sign up"}
+                    {isLoading ? "..." : t(language, "signup.submit")}
                   </Button>
                 </form>
               </Form>
             </CardContent>
             <CardFooter className="flex justify-center">
               <p className="text-sm text-muted-foreground">
-                Already have an account?{" "}
+                {t(language, "signup.alreadyHaveAccount")}{" "}
                 <Link to="/login" className="text-primary hover:underline">
-                  Login
+                  {t(language, "signup.login")}
                 </Link>
               </p>
             </CardFooter>
