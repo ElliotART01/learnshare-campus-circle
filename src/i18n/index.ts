@@ -1,170 +1,133 @@
 
-const resources = {
+export const translations = {
   en: {
-    signup: {
-      title: "Create an account",
-      description: "Sign up to start sharing and requesting educational materials",
-      name: "Full Name",
-      namePlaceholder: "John Doe",
-      email: "Email",
-      emailPlaceholder: "your.email@example.com",
-      major: "Major",
-      majorPlaceholder: "Select your major",
-      age: "Age (optional)",
-      agePlaceholder: "E.g. 21",
-      gender: "Gender",
-      genderPlaceholder: "Select your gender",
-      password: "Password",
-      confirmPassword: "Confirm Password",
-      submit: "Sign up",
-      alreadyHaveAccount: "Already have an account?",
-      login: "Login",
-      genderList: [
-        { value: "Male", label: "Male" },
-        { value: "Female", label: "Female" },
-        { value: "Other", label: "Other" },
-        { value: "Prefer not to say", label: "Prefer not to say" }
-      ],
-      majors: [
-        "Engineering",
-        "Computer Science",
-        "Business Administration",
-        "Medicine",
-        "Pharmacy",
-        "Dentistry",
-        "Nursing",
-        "Law",
-        "Education",
-        "Science",
-        "Humanities",
-        "Applied Medical Sciences",
-        "Sharia",
-        "Languages & Translation",
-        "Arts & Literature",
-        "Other"
-      ]
-    },
-    login: {
-      title: "Welcome back",
-      description: "Sign in to your account",
-      email: "Email",
-      emailPlaceholder: "your.email@example.com",
-      password: "Password",
-      forgotPassword: "Forgot password?",
-      submit: "Sign in",
-      noAccount: "Don't have an account?",
-      signup: "Sign up"
-    },
-    common: {
-      home: "Home",
-      about: "About",
-      profile: "Profile",
-      settings: "Settings",
-      logout: "Logout",
-      login: "Log in",
-      signup: "Sign up",
-      loading: "Loading...",
-      save: "Save",
-      cancel: "Cancel",
-      delete: "Delete",
-      edit: "Edit",
-      search: "Search",
-      noResults: "No results found",
-      error: "An error occurred",
-      success: "Success",
-      welcome: "Welcome"
-    },
-    language: "عربي",
-    darkMode: "Dark",
-    lightMode: "Light"
+    // Authentication
+    login: "Login",
+    signup: "Sign Up",
+    logout: "Logout",
+    name: "Name",
+    email: "Email",
+    password: "Password",
+    confirmPassword: "Confirm Password",
+    submit: "Submit",
+    
+    // Navigation
+    home: "Home",
+    about: "About",
+    profile: "Profile",
+    aiAssistant: "AI Assistant",
+    
+    // Theme
+    darkMode: "Dark Mode",
+    lightMode: "Light Mode",
+    
+    // Main content
+    campusCircle: "Campus Circle",
+    connectingStudents: "Connecting Students",
+    platformDescription: "A platform for students to exchange educational materials",
+    
+    // Errors
+    invalidCredentials: "Invalid credentials. Please try again.",
+    passwordMismatch: "Passwords do not match.",
+    required: "This field is required.",
+    
+    // Success messages
+    loginSuccess: "Logged in successfully.",
+    signupSuccess: "Signed up successfully.",
+    profileUpdated: "Profile updated successfully.",
+    
+    // AI Features
+    aiFeatures: "AI Assistant Features",
+    aiFeaturesDescription: "Get instant support, personalized recommendations, and more using our AI-powered features",
+    studentSupport: "Student Support",
+    recommendations: "Recommendations",
+    contentGeneration: "Content Generation",
+    smartSearch: "Smart Search",
+    
+    studentSupportTitle: "Student Support Assistant",
+    recommendationsTitle: "Personalized Recommendations",
+    contentGenerationTitle: "Educational Content Generator",
+    smartSearchTitle: "Smart Resource Search",
+    
+    askMeAnything: "Ask me anything about university courses, policies, or resources",
+    askAboutUniversity: "Ask about university majors, policies, or resources...",
+    askForRecommendations: "What resources or connections are you looking for?",
+    askForContent: "What topic would you like me to explain or summarize?",
+    searchForResources: "Search for educational resources...",
+    
+    // Exchange platform
+    postRequest: "Post Request",
+    postOffer: "Post Offer",
+    browseRequests: "Browse Requests",
+    browseOffers: "Browse Offers"
   },
   ar: {
-    signup: {
-      title: "إنشاء حساب",
-      description: "سجّل الآن لبدء مشاركة وطلب المواد التعليمية",
-      name: "الاسم الكامل",
-      namePlaceholder: "أحمد محمد",
-      email: "البريد الإلكتروني",
-      emailPlaceholder: "you@example.com",
-      major: "التخصص",
-      majorPlaceholder: "اختر تخصصك",
-      age: "العمر (اختياري)",
-      agePlaceholder: "مثال: ٢١",
-      gender: "الجنس",
-      genderPlaceholder: "اختر جنسك",
-      password: "كلمة المرور",
-      confirmPassword: "تأكيد كلمة المرور",
-      submit: "تسجيل",
-      alreadyHaveAccount: "لديك حساب بالفعل؟",
-      login: "تسجيل الدخول",
-      genderList: [
-        { value: "Male", label: "ذكر" },
-        { value: "Female", label: "أنثى" },
-        { value: "Other", label: "آخر" },
-        { value: "Prefer not to say", label: "أفضل عدم القول" }
-      ],
-      majors: [
-        "الهندسة",
-        "علوم الحاسب",
-        "إدارة الأعمال",
-        "الطب",
-        "الصيدلة",
-        "طب الأسنان",
-        "التمريض",
-        "القانون",
-        "التربية",
-        "العلوم",
-        "العلوم الإنسانية",
-        "العلوم الطبية التطبيقية",
-        "الشريعة",
-        "اللغات والترجمة",
-        "الآداب",
-        "أخرى"
-      ]
-    },
-    login: {
-      title: "مرحباً بعودتك",
-      description: "تسجيل الدخول إلى حسابك",
-      email: "البريد الإلكتروني",
-      emailPlaceholder: "بريدك@مثال.كوم",
-      password: "كلمة المرور",
-      forgotPassword: "نسيت كلمة المرور؟",
-      submit: "تسجيل الدخول",
-      noAccount: "ليس لديك حساب؟",
-      signup: "إنشاء حساب"
-    },
-    common: {
-      home: "الرئيسية",
-      about: "عن الموقع",
-      profile: "الملف الشخصي",
-      settings: "الإعدادات",
-      logout: "تسجيل الخروج",
-      login: "تسجيل الدخول",
-      signup: "إنشاء حساب",
-      loading: "جاري التحميل...",
-      save: "حفظ",
-      cancel: "إلغاء",
-      delete: "حذف",
-      edit: "تعديل",
-      search: "بحث",
-      noResults: "لم يتم العثور على نتائج",
-      error: "حدث خطأ",
-      success: "تم بنجاح",
-      welcome: "مرحباً"
-    },
-    language: "English",
-    darkMode: "الوضع الليلي",
-    lightMode: "الوضع الفاتح"
+    // Authentication
+    login: "تسجيل الدخول",
+    signup: "إنشاء حساب",
+    logout: "تسجيل الخروج",
+    name: "الاسم",
+    email: "البريد الإلكتروني",
+    password: "كلمة المرور",
+    confirmPassword: "تأكيد كلمة المرور",
+    submit: "إرسال",
+    
+    // Navigation
+    home: "الرئيسية",
+    about: "حول",
+    profile: "الملف الشخصي",
+    aiAssistant: "المساعد الذكي",
+    
+    // Theme
+    darkMode: "الوضع المظلم",
+    lightMode: "الوضع المضيء",
+    
+    // Main content
+    campusCircle: "دائرة الحرم الجامعي",
+    connectingStudents: "ربط الطلاب",
+    platformDescription: "منصة لتبادل المواد التعليمية بين الطلاب",
+    
+    // Errors
+    invalidCredentials: "بيانات الاعتماد غير صالحة. يرجى المحاولة مرة أخرى.",
+    passwordMismatch: "كلمات المرور غير متطابقة.",
+    required: "هذا الحقل مطلوب.",
+    
+    // Success messages
+    loginSuccess: "تم تسجيل الدخول بنجاح.",
+    signupSuccess: "تم التسجيل بنجاح.",
+    profileUpdated: "تم تحديث الملف الشخصي بنجاح.",
+    
+    // AI Features
+    aiFeatures: "ميزات المساعد الذكي",
+    aiFeaturesDescription: "احصل على دعم فوري، وتوصيات مخصصة، والمزيد باستخدام ميزاتنا المدعومة بالذكاء الاصطناعي",
+    studentSupport: "دعم الطلاب",
+    recommendations: "التوصيات",
+    contentGeneration: "إنشاء المحتوى",
+    smartSearch: "البحث الذكي",
+    
+    studentSupportTitle: "مساعد دعم الطلاب",
+    recommendationsTitle: "توصيات مخصصة",
+    contentGenerationTitle: "منشئ المحتوى التعليمي",
+    smartSearchTitle: "بحث ذكي عن الموارد",
+    
+    askMeAnything: "اسألني أي شيء عن المقررات الجامعية أو السياسات أو الموارد",
+    askAboutUniversity: "اسأل عن تخصصات الجامعة أو السياسات أو الموارد...",
+    askForRecommendations: "ما هي الموارد أو الاتصالات التي تبحث عنها؟",
+    askForContent: "ما هو الموضوع الذي ترغب في شرحه أو تلخيصه؟",
+    searchForResources: "ابحث عن الموارد التعليمية...",
+    
+    // Exchange platform
+    postRequest: "نشر طلب",
+    postOffer: "نشر عرض",
+    browseRequests: "تصفح الطلبات",
+    browseOffers: "تصفح العروض"
   }
 };
 
-type Resources = typeof resources;
-export function t(lang: "en" | "ar", key: string): any {
-  const keys = key.split(".");
-  let result: any = resources[lang];
-  for (const k of keys) {
-    result = result?.[k];
-    if (!result) return key;
+export const t = (language: string, key: string): string => {
+  if (language === "ar" && translations.ar[key as keyof typeof translations.ar]) {
+    return translations.ar[key as keyof typeof translations.ar];
   }
-  return result;
-}
+  
+  return translations.en[key as keyof typeof translations.en] || key;
+};

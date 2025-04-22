@@ -12,6 +12,7 @@ import { LanguageProvider } from "./context/LanguageContext";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Profile from "./pages/Profile";
+import AIFeatures from "./pages/AIFeatures";
 import { useAuth } from "./context/AuthContext";
 import { ThemeProvider } from "next-themes";
 
@@ -43,6 +44,7 @@ const AppWithAuth = () => {
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<About />} />
+          <Route path="/ai-features" element={<AIFeatures />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route 

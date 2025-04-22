@@ -10,6 +10,10 @@ import { Request, Offer, storageUtils } from "@/types";
 import { v4 as uuidv4 } from 'uuid';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
+import { Button } from "@/components/ui/button";
+import { MessageSquare } from "lucide-react";
+import { Link } from "react-router-dom";
+import { useLanguage } from "@/context/LanguageContext";
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("browse-offers");
@@ -17,6 +21,7 @@ const Index = () => {
   const [offers, setOffers] = useState<Offer[]>([]);
   const { currentUser } = useAuth();
   const { toast } = useToast();
+  const { language, t } = useLanguage();
 
   // Load data from localStorage on component mount
   useEffect(() => {
@@ -100,16 +105,25 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-900">
       <Header />
       
       <main className="max-w-7xl mx-auto px-4 py-8">
         <div className="text-center mb-10">
-          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">Naran Univrsity Cycling</h1>
-          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Connect with fellow students to exchange educational materials. 
-            Request what you need or offer what you no longer use.
+          <h1 className="text-3xl sm:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">Najran University Cycling</h1>
+          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+            {t(language, "platformDescription")}
           </p>
+          
+          {/* AI Assistant CTA */}
+          <div className="mt-6">
+            <Link to="/ai-features">
+              <Button className="bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-700 hover:to-blue-700">
+                <MessageSquare className="mr-2 h-5 w-5" />
+                {t(language, "aiAssistant")} - {t(language, "tryNow")}
+              </Button>
+            </Link>
+          </div>
         </div>
         
         <Tabs 
@@ -119,10 +133,10 @@ const Index = () => {
           className="w-full"
         >
           <TabsList className="grid w-full grid-cols-2 md:grid-cols-4 mb-8">
-            <TabsTrigger value="post-request">Post Request</TabsTrigger>
-            <TabsTrigger value="post-offer">Post Offer</TabsTrigger>
-            <TabsTrigger value="browse-requests">Browse Requests</TabsTrigger>
-            <TabsTrigger value="browse-offers">Browse Offers</TabsTrigger>
+            <TabsTrigger value="post-request">{t(language, "postRequest")}</TabsTrigger>
+            <TabsTrigger value="post-offer">{t(language, "postOffer")}</TabsTrigger>
+            <TabsTrigger value="browse-requests">{t(language, "browseRequests")}</TabsTrigger>
+            <TabsTrigger value="browse-offers">{t(language, "browseOffers")}</TabsTrigger>
           </TabsList>
           
           <TabsContent value="post-request" className="mt-6">
@@ -147,11 +161,11 @@ const Index = () => {
         </Tabs>
       </main>
       
-      <footer className="bg-white border-t mt-16 py-8">
+      <footer className="bg-white dark:bg-gray-800 border-t dark:border-gray-700 mt-16 py-8">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <p className="text-gray-500">© 2024 Campus Circle - Connecting Students</p>
-          <p className="text-sm text-gray-400 mt-2">
-            A platform for students to exchange educational materials
+          <p className="text-gray-500 dark:text-gray-400">© 2024 Campus Circle - {t(language, "connectingStudents")}</p>
+          <p className="text-sm text-gray-400 dark:text-gray-500 mt-2">
+            {t(language, "platformDescription")}
           </p>
         </div>
       </footer>
