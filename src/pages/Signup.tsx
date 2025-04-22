@@ -46,7 +46,8 @@ const Signup = () => {
   const onSubmit = async (data: SignupFormValues) => {
     setIsLoading(true);
     try {
-      await signup(data.name, data.email, data.password);
+      // Adding the required 'major' parameter that was missing
+      await signup(data.name, data.email, data.password, "Undeclared");
       toast({
         title: "Success",
         description: "Account created successfully!",
