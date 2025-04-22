@@ -1,12 +1,15 @@
 
 import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { t as translate } from "@/i18n"; // Import the translation function
 
 type Language = "en" | "ar";
 
 interface LanguageContextType {
   language: Language;
   setLanguage: (lang: Language) => void;
+  toggleLanguage: () => void;
   isRTL: boolean;
+  t: (language: string, key: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -19,6 +22,11 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   });
 
   const isRTL = language === "ar";
+
+  // Function to toggle between languages
+  const toggleLanguage = () => {
+    setLanguage(prevLang => prevLang === "en" ? "ar" : "en");
+  };
 
   // Store language preference in localStorage when it changes
   useEffect(() => {
@@ -40,7 +48,15 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage: handleSetLanguage, isRTL }}>
+    <LanguageContext.Provider 
+      value={{ 
+        language, 
+        setLanguage: handleSetLanguage, 
+        toggleLanguage,
+        isRTL,
+        t: translate // Pass the translation function to the context
+      }}
+    >
       <div dir={isRTL ? "rtl" : "ltr"} className={isRTL ? "rtl" : ""}>
         {children}
       </div>
